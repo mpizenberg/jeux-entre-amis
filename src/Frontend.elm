@@ -3,7 +3,6 @@ module Frontend exposing (..)
 import Browser exposing (UrlRequest(..))
 import Browser.Navigation as Nav
 import Element exposing (Element)
-import Element.Background
 import Element.Font
 import Element.Input
 import Html exposing (Html)

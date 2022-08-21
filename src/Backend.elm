@@ -1,5 +1,6 @@
 module Backend exposing (..)
 
+import Data.Words
 import Dict exposing (Dict)
 import Lamdera exposing (ClientId, SessionId)
 import Random
@@ -97,20 +98,6 @@ sendToPlayers msg players =
         |> Cmd.batch
 
 
-
---
--- type alias Game =
---     { players : Dict ClientId String
---     , alreadyPickedWords : Set String
---     , state : GameState
---     }
---
---
--- type GameState
---     = WaitingForPlayersToConnect
---     | PickedTheSpiesAndWord (Set ClientId) String
-
-
 helperDisconnection : ClientId -> String -> Game -> ( Dict String Game, List (Cmd BackendMsg) ) -> ( Dict String Game, List (Cmd BackendMsg) )
 helperDisconnection clientId lobby game ( updatedGames, commands ) =
     -- Currently, we just have one game that can only be updated if the game hasn't started yet
@@ -198,7 +185,7 @@ updateFromFrontend sessionId clientId msg model =
                                 |> Random.map (List.take 2 >> Set.fromList)
 
                         wordGenerator =
-                            Random.uniform "Toto" [ "Tata", "Titi" ]
+                            Random.uniform "COVID" Data.Words.uncategorizedSmall
 
                         spiesAndWordGenerator =
                             Random.map2 Tuple.pair
@@ -206,21 +193,3 @@ updateFromFrontend sessionId clientId msg model =
                                 wordGenerator
                     in
                     ( model, Random.generate (DistributedRoles { lobby = lobby }) spiesAndWordGenerator )
-
-
-
---
--- type alias BackendModel =
---     { games : Dict String Game }
---
---
--- type alias Game =
---     { players : Dict ClientId String
---     , alreadyPickedWords : Set String
---     , state : GameState
---     }
---
---
--- type GameState
---     = WaitingForPlayersToConnect
---     | PickedTheSpiesAndWord (Set ClientId) String
